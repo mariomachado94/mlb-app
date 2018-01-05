@@ -1,0 +1,35 @@
+/**
+ * List of teams for favourite team selection
+ */
+export const TEAMS: String[] = [
+	"Angels",
+	"Astros",
+	"Athletics",
+	"Blue Jays",
+	"Braves",
+	"Brewers",
+	"Cardinals",
+	"Cubs",
+	"D-backs",
+	"Dodgers",
+	"Giants",
+	"Indians",
+	"Mariners",
+	"Marlins",
+	"Mets",
+	"Nationals",
+	"Orioles",
+	"Padres",
+	"Phillies",
+	"Pirates",
+	"Rangers",
+	"Rays",
+	"Red Sox",
+	"Reds",
+	"Rockies",
+	"Royals",
+	"Tigers",
+	"Twins",
+	"White Sox",
+	"Yankees"
+];

@@ -1,0 +1,74 @@
+<div *ngIf="game">
+	<h4 *ngIf="!(boxscore?.linescore?.inning_line_score?.length > 0)">
+		Unable to display game results due to game status: {{game.status.status}}
+	</h4>
+	<div *ngIf="boxscore?.linescore?.inning_line_score?.length > 0">
+		<div class="row">
+			<table class="table">
+				<thead class="thead-light">
+				    <tr>
+						<th scope="col"></th>
+						<th *ngFor="let inning of boxscore.linescore.inning_line_score" scope="col">{{inning.inning}}</th>
+						<th scope="col">R</th>
+						<th scope="col">H</th>
+						<th scope="col">E</th>
+				    </tr>
+			  	</thead>
+			  	<tbody>
+				  	<tr>
+				    	<th scope="row">{{boxscore.home_team_code | uppercase}}</th>
+						<td *ngFor="let inning of boxscore.linescore.inning_line_score">{{inning.home}}</td>
+						<td>{{boxscore.linescore.home_team_runs}}</td>
+						<td>{{boxscore.linescore.home_team_hits}}</td>
+						<td>{{boxscore.linescore.home_team_errors}}</td>
+				    </tr>
+				    <tr>
+						<th scope="row">{{boxscore.away_team_code | uppercase}}</th>
+						<td *ngFor="let inning of boxscore.linescore.inning_line_score">{{inning.away}}</td>
+						<td>{{boxscore.linescore.away_team_runs}}</td>
+						<td>{{boxscore.linescore.away_team_hits}}</td>
+						<td>{{boxscore.linescore.away_team_errors}}</td>
+				    </tr>
+			  	</tbody>
+			</table>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="btn-group" role="group" aria-label="Basic example">
+				<button type="button" class="btn btn-secondary" (click)="setTeamIndex(homeIndex)">{{boxscore.home_fname}}</button>
+				<button type="button" class="btn btn-secondary" (click)="setTeamIndex(awayIndex)">{{boxscore.away_fname}}</button>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-12">
+				<table class="table">
+					<thead class="thead-light">
+					    <tr>
+							<th scope="col">Name</th>
+							<th scope="col">AB</th>
+							<th scope="col">R</th>
+							<th scope="col">H</th>
+							<th scope="col">RBI</th>
+							<th scope="col">BB</th>
+							<th scope="col">SO</th>
+							<th scope="col">AVG</th>
+					    </tr>
+				  	</thead>
+				  	<tbody>
+					  	<tr *ngFor="let batter of batters">
+					    	<th scope="row">{{batter.name}}</th>
+							<td>{{batter.ab}}</td>
+							<td>{{batter.r}}</td>
+							<td>{{batter.h}}</td>
+							<td>{{batter.rbi}}</td>
+							<td>{{batter.bb}}</td>
+							<td>{{batter.so}}</td>
+							<td>{{batter.avg}}</td>
+					    </tr>
+				  	</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
