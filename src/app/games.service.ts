@@ -11,10 +11,23 @@ import { GameDetailsRequest, Boxscore } from './game-details-request';
 
 const apiURL = "http://gd2.mlb.com/components/game/mlb/year_:year/month_:month/day_:day/master_scoreboard.json";
 
+/**
+ * The GamesService class provides data to the views.
+ * It makes api requests, and caches the most recent results.
+ * Furthermore, it stores state information about the games-list view
+ * such as favourite team. If this application were to grow, it would
+ * be a good decision to separate the api request logic from view state
+ * logic into two separate service classes.
+ */
+
 @Injectable()
 export class GamesService {
 
   private urlBuilder = new RestURLBuilder();
+  cachedDate: NgbDateStruct;
+  cachedGames: Game[];
+  favTeam: string;
+  selectedGameDir: string;
 
   constructor(private http: HttpClient) { }
 
@@ -24,7 +37,9 @@ export class GamesService {
    *
    * @param date - date of games requested.
    */
-  getGames(date: NgbDateStruct): Observable<Game[]> {
+  getGames(date: NgbDateStruct, favTeam: string): Observable<Game[]> {
+    this.cachedDate = date;
+    this.favTeam = favTeam;
   	let request = this.buildRequest(date);
   	return this.http.get<GamesRequest>(request).pipe(
   		map(result => {
@@ -35,6 +50,8 @@ export class GamesService {
   			else if(!(games instanceof Array)) {
   				games = [games];
   			}
+
+        this.cachedGames = games;
   			return games;
   		}),
   		catchError(this.handleError("getGames()",[]))
@@ -82,13 +99,32 @@ export class GamesService {
    *
    * @param gameDataDir - the game_data_directory of the desired game
    */
-  getGameDetails(gameDataDir: string): Observable<Boxscore> {
-    let request = `http://gd2.mlb.com${gameDataDir}/boxscore.json`;
+  getGameDetails(): Observable<Boxscore> {
+    let request = `http://gd2.mlb.com${this.selectedGameDir}/boxscore.json`;
     return this.http.get<GameDetailsRequest>(request).pipe(
       map(result => result.data.boxscore),
       catchError(this.handleError("getGameDetails()",{}))
     );
   }
 
+  hadPreviousState(): boolean {
+    return typeof this.cachedDate !== 'undefined';
+  }
+
+  getPreviousState() {
+    return {
+      date: this.cachedDate,
+      games: this.cachedGames,
+      favTeam: this.favTeam
+    }
+  }
+
+  selectGame(game: Game): void {
+    this.selectedGameDir = game.game_data_directory;
+  }
+
+  setFavTeam(team: string): void {
+    this.favTeam = team;
+  }
 
 }

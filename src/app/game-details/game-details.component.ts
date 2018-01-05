@@ -10,7 +10,6 @@ import { Boxscore, Batter, TeamIndex } from '../game-details-request';
 })
 export class GameDetailsComponent implements OnInit {
 
-  @Input() game: Game;
   boxscore: Boxscore;
   batters: Batter[];
   homeIndex = TeamIndex.Home;
@@ -19,23 +18,18 @@ export class GameDetailsComponent implements OnInit {
   constructor(private gamesService: GamesService) { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges() {
-  	this.getGameDetails();
+    this.getGameDetails();
   }
 
   /**
    * Retrieve game details from gamesService
    */
   getGameDetails(): void {
-    if(this.game) {
-    	this.gamesService.getGameDetails(this.game.game_data_directory)
-        .subscribe(boxscore => {
-          this.boxscore = boxscore;
-          this.setTeamIndex(0);
-        });
-    }
+  	this.gamesService.getGameDetails()
+      .subscribe(boxscore => {
+        this.boxscore = boxscore;
+        this.setTeamIndex(this.homeIndex);
+      });
   }
 
   /*

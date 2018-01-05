@@ -15,28 +15,39 @@ export class GamesListComponent implements OnInit {
   games: Game[];
   teams = TEAMS;
   favTeam = "Blue Jays";
-  selectedGame: Game;
 
   constructor(private gamesService: GamesService) { }
 
   ngOnInit() {
-    this.selectToday();
-    this.getGames();
+    if(this.gamesService.hadPreviousState()) {
+      //todo create this method
+      this.restoreState();
+    }
+    else {
+      this.selectToday();
+      this.getGames();
+    }
   }
 
-  selectToday() {
+  selectToday(): void {
   	const today = new Date();
     this.date = {year: today.getFullYear(), month: today.getMonth() + 1, day: today.getDate()};
+  }
+
+  restoreState(): void {
+    let pstate = this.gamesService.getPreviousState();
+    this.date = pstate.date;
+    this.games = pstate.games;
+    this.favTeam = pstate.favTeam;
   }
 
   /*
    * Get array of games from gameService.
    */
-  getGames(): void{
-  	this.gamesService.getGames(this.date)
+  getGames(): void {
+  	this.gamesService.getGames(this.date, this.favTeam)
       .subscribe(games => {
       	this.games = games;
-      	this.selectedGame = undefined;
       	this.favSort();
       });
   }
@@ -44,7 +55,7 @@ export class GamesListComponent implements OnInit {
   /*
    * Pull favourite game to the beginning of the games array.
    */
-  private favSort(): void{
+  private favSort(): void {
   	this.games.find((game, index) => {
   		if(game.home_team_name === this.favTeam || game.away_team_name === this.favTeam) {
   			this.games.splice(index, 1);
@@ -55,8 +66,9 @@ export class GamesListComponent implements OnInit {
   	});
   }
 
-  setFavTeam(team: string): void{
+  setFavTeam(team: string): void {
   	this.favTeam = team;
+    this.gamesService.setFavTeam(team);
   	this.favSort();
   }
 
@@ -67,7 +79,7 @@ export class GamesListComponent implements OnInit {
   }
 
   selectGame(game: Game): void {
-  	this.selectedGame = game;
+    this.gamesService.selectGame(game);
   }
 
 }

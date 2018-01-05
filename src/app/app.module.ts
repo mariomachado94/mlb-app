@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { GamesListComponent } from './games-list/games-list.component';
 import { GamesService } from './games.service';
 import { GameDetailsComponent } from './game-details/game-details.component';
+import { AppRoutingModule } from './/app-routing.module';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { GameDetailsComponent } from './game-details/game-details.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    AppRoutingModule
   ],
   providers: [GamesService],
   bootstrap: [AppComponent]

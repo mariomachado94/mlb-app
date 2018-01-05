@@ -1,8 +1,11 @@
-<div *ngIf="game">
-	<h4 *ngIf="!(boxscore?.linescore?.inning_line_score?.length > 0)">
-		Unable to display game results due to game status: {{game.status.status}}
+<div *ngIf="boxscore">
+	<h4 *ngIf="!(boxscore.linescore?.inning_line_score?.length > 0)">
+		Game stats unavailable
 	</h4>
-	<div *ngIf="boxscore?.linescore?.inning_line_score?.length > 0">
+	<div class="row">
+		<button type="button" class="btn btn-info" routerLink="">Back</button>
+	</div>
+	<div *ngIf="boxscore.linescore?.inning_line_score?.length > 0">
 		<div class="row">
 			<table class="table">
 				<thead class="thead-light">

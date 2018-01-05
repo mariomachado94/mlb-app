@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-lg-3 col-md-4 col-sm-6">
 
-	    <ngb-datepicker #dp [(ngModel)]="date" (select)="getGames()"></ngb-datepicker>
+	    <ngb-datepicker #dp [(ngModel)]="date" [startDate]="date" (select)="getGames()"></ngb-datepicker>
       	
       	<div ngbDropdown class="d-inline-block">
 	    	<label>Favourite Team:</label>
@@ -17,8 +17,9 @@
     <div class="col-md-3 col-sm-6">
     	<ul class="list-group game-list">
     		<li class="list-group-item list-group-item-secondary">Games on {{date.day}}/{{date.month}}/{{date.year}}</li>
+
     		<li *ngIf="games?.length < 1" class="list-group-item">No games on this day.</li>
-    		<li *ngFor="let game of games" class="list-group-item" [class.active]="game === selectedGame" (click)="selectGame(game)">
+    		<li *ngFor="let game of games" routerLink="/game-details" class="list-group-item list-group-item-action" (click)="selectGame(game)">
     			<span [class.font-weight-bold]="game.linescore && homeWin(game)">
 					{{game.home_team_name}}
 					<span *ngIf="game.linescore" class="float-right">{{game.linescore.r.home}}</span>
@@ -32,8 +33,5 @@
 				{{game.status.status}}
     		</li>
     	</ul>
-    </div>
-    <div class="col-lg-6 col-md-5 col-sm-12">
-    	<app-game-details [game]="selectedGame"></app-game-details>
     </div>
 </div>
